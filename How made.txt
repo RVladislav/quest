@@ -1,0 +1,76 @@
+set RAILS_ENV=production
+ruby script/rails generate redmine_plugin Quest
+
+|init.rb|
+Redmine::Plugin.register :quest do
+  name 'Quest plugin'
+  author 'Vladislav R.'
+  description 'This is a plugin for Redmine'
+  version '0.0.1'
+  menu :application_menu, :questions, { :controller => 'questions', :action => 'index' }, :caption => 'Questions'
+end
+ruby script/rails generate redmine_plugin_model quest questions question:string answer:boolean other:string
+
+|1001_create_questions.rb| !!!Если ошибка, возможно у вас более 1 плагина и номер миграции совпадает => сменить номер миграции (101, 1001, 1000001...)
+class CreatePolls < ActiveRecord::Migration
+  def change
+    create_table :polls do |t|
+      t.string :question
+      t.integer :yes, :default => 0
+      t.integer :no, :default => 0
+    end
+  end
+end
+
+rake redmine:plugins:migrate
+Сам добавил вопросы в базу
+
+|questions.rb|
+class Questions < ActiveRecord::Base
+  def ans(answer)
+	answer == 'true' ? :true : 'false' ? :false : :answer
+  end
+end
+|
+
+ruby script/rails generate redmine_plugin_controller Quest questions index vote
+
+|questions_controller.rb|
+class QuestionsController < ApplicationController
+  unloadable
+
+  def index
+	@ques = Questions.all
+  end
+  
+  def ans 
+	flash[:notice] = 'Work'
+	redirect_to :action => 'index'
+  end
+end
+|
+
+|index.html|
+<% @radio = 0 %>
+<% @n = 'answerYesNo' %>
+<% @ques.each do |q| %>
+<p>
+<%= @radio = @radio + 1 %>)
+<%= q.question %>?
+<br>
+<%= radio_button_tag name = @n, 'true', false, { :answer => 'true' } %> Да
+<br>
+<%= radio_button_tag name = @n, 'false', false, { :answer => 'false' } %> Нет
+<br>
+<%= radio_button_tag name = @n, 'false', false %>
+<%= text_field_tag 'answerText', '', { :answer => 'text' } %>
+<% @n+='1' %>
+</p>
+<% end %>
+<%= button_to 'Save', { :action => 'ans', :controller => 'questions'}, :method => :post %>
+|
+
+|routes.rb|
+get 'questions', :to => 'questions#index'
+post 'ans', :to => 'questions#ans'
+|

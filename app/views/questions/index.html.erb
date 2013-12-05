@@ -1,0 +1,17 @@
+<% @radio = 0 %>
+<% @n = 'answerYesNo' %>
+<% @ques.each do |q| %>
+<p>
+<%= @radio = @radio + 1 %>)
+<%= q.question %>?
+<br>
+<%= radio_button_tag name = @n, 'true', false, { :answer => 'true' } %> Да
+<br>
+<%= radio_button_tag name = @n, 'false', false, { :answer => 'false' } %> Нет
+<br>
+<%= radio_button_tag name = @n, 'false', false %>
+<%= text_field_tag 'answerText', '', { :answer => 'text' } %>
+<% @n+='1' %>
+</p>
+<% end %>
+<%= button_to 'Save', { :action => 'ans', :controller => 'questions'}, :method => :post %>
