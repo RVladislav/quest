@@ -1,2 +1,6 @@
 get 'questions', :to => 'questions#index'
 post 'ans', :to => 'questions#ans'
+post 'showans', :to => 'questions#showans'
+post 'addQuestion', :to => 'questions#addQuestion'
+post 'addAnswer', :to => 'questions#addAnswer'
+post 'saveAnswer', :to => 'questions#saveAnswer'

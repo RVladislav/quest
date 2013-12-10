@@ -1,0 +1,26 @@
+<h2>Режим просмотра ответов</h2>
+<% @ua.each do |u| %>
+	<p>
+	Пользователь: 
+	<% @us = User.where(id:[u.users_id]) %>
+	<% @us.each do |allusers| %>
+	<%= allusers.firstname %>
+	<%= allusers.lastname %>
+	
+	<% @answe = Answers.where(id: [u.answers_id]) %>
+	<% @answe.each do |a| %>
+		<% @a = a.textAnswer %>
+		<% @tque = Questions.where(id: [a.questions_id]) %>
+		<% @tque.each do |q| %>
+			<% @q = q.textQuestion %>
+		<% end %>
+	<% end %>
+	<br>
+	Вопрос:
+	<%= @q %>?
+	<br>
+	Ответ:
+	<%= @a %>
+	</p>
+<% end %>
+<% end %>
