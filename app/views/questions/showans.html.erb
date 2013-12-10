@@ -1,12 +1,19 @@
-<h2>Режим просмотра ответов</h2>
+<h2>Просмотр ответов</h2>
+<% @check %>
 <% @ua.each do |u| %>
 	<p>
-	Пользователь: 
-	<% @us = User.where(id:[u.users_id]) %>
-	<% @us.each do |allusers| %>
-	<%= allusers.firstname %>
-	<%= allusers.lastname %>
-	
+		<% if @check != u.users_id or @check == nil %>
+		<% @userShow = User.where(id: [u.users_id]) %>
+		<% @userShow.each do |ushow| %>
+		<b>
+		Пользователь: 
+		<%= ushow.firstname %>
+		<%= ushow.lastname %>
+		</b>
+		<br>
+		<% end %>
+		<% @check = u.users_id %>
+		<% end %>	
 	<% @answe = Answers.where(id: [u.answers_id]) %>
 	<% @answe.each do |a| %>
 		<% @a = a.textAnswer %>
@@ -15,12 +22,10 @@
 			<% @q = q.textQuestion %>
 		<% end %>
 	<% end %>
-	<br>
 	Вопрос:
 	<%= @q %>?
 	<br>
 	Ответ:
 	<%= @a %>
 	</p>
-<% end %>
 <% end %>

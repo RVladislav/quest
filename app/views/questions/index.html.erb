@@ -1,4 +1,13 @@
 <h2>Анкета</h2>
+<% @check = false %>
+
+<% @ua.each do |ch| %>
+<% ch.users_id %>
+<% if ch.users_id == User.current.id %>
+<% @check = true %>
+<% end %>
+<% end %>
+<% if @check == false %>
 <table>
 	<tr>
 		<td><%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %></td>
@@ -21,3 +30,7 @@
 <% @i = @i + 1 %>
 <% end %>
 <%= button_to 'Сохранить', { :action => 'ans', :controller => 'questions'}, :method => :post %>
+<% else %>
+<p>Вы уже отвечали на вопросы</p>
+<%= button_to 'Показать результаты', { :action => 'showans', :controller => 'questions'}, :method => :post %>
+<% end %>

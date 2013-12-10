@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
   unloadable
   def index
 	@ques = Questions.all
+  @ua = Useranswer.all
   end
 
   def showans
