@@ -1,65 +1,64 @@
 <h2>Просмотр ответов</h2>
-<% if User.current.admin == true %>
+
+<% if User.current.admin == true %> <!-- Проверка для вывода имени. Имеет вид: имя пользователя <br> все его ответы -->
 <% @check %>
-<% @ua.each do |u| %>
+<% @ua.each do |u| %> <!-- Вывод всех ответов всех пользователей, т.к. (User.current.admin == true) пользователь - администратор-->
 	<p>
-		<% if @check != u.users_id or @check == nil %>
-		<% @userShow = User.where(id: [u.users_id]) %>
-		<% @userShow.each do |ushow| %>
-		<b>
-		Пользователь: 
-		<%= ushow.firstname %>
-		<%= ushow.lastname %>
-		</b>
-		<br>
-		<% end %>
-		<% @check = u.users_id %>
+		<% if @check != u.users_id or @check == nil %> <!-- Просто красивый вывод -->
+			<% @userShow = User.where(id: [u.users_id]) %>
+			<% @userShow.each do |ushow| %>
+				<b>
+				Пользователь: 
+				<%= ushow.firstname %> <!-- Непосредственно имя и фамилия пользователя -->
+				<%= ushow.lastname %>
+				</b>
+				<br>
+			<% end %>
+			<% @check = u.users_id %> <!-- Данная процедура исключает дублирование имени и фамилии пользователя над каждым вопросом -->
 		<% end %>	
-	<% @answe = Answers.where(id: [u.answers_id]) %>
-	<% @answe.each do |a| %>
-		<% @a = a.textAnswer %>
-		<% @tque = Questions.where(id: [a.questions_id]) %>
-		<% @tque.each do |q| %>
-			<% @q = q.textQuestion %>
+		<% @answe = Answers.where(id: [u.answers_id]) %>
+		<% @answe.each do |a| %>
+			<% @a = a.textAnswer %> <!-- Непосредственно вывод ответов пользователя -->
+			<% @tque = Questions.where(id: [a.questions_id]) %>
+			<% @tque.each do |q| %>
+				<% @q = q.textQuestion %> <!-- Вывод текста вопроса -->
+			<% end %>
 		<% end %>
-	<% end %>
-	Вопрос:
-	<%= @q %>?
-	<br>
-	Ответ:
-	<%= @a %>
+		Вопрос: <%= @q %>? <!-- Вывод -->
+		<br>
+		Ответ: <%= @a %> <!-- Вывод -->
 	</p>
 <% end %>
-<% else %>
-<% @check %>
-<% @uaCurrent = Useranswer.where(users_id:[User.current.id]) %>
-<% @uaCurrent.each do |u| %>
-	<p>
-		<% if @check != u.users_id or @check == nil %>
-		<% @userShow = User.where(id: [u.users_id]) %>
-		<% @userShow.each do |ushow| %>
-		<b>
-		Пользователь: 
-		<%= ushow.firstname %>
-		<%= ushow.lastname %>
-		</b>
-		<br>
-		<% end %>
-		<% @check = u.users_id %>
-		<% end %>	
-	<% @answe = Answers.where(id: [u.answers_id]) %>
-	<% @answe.each do |a| %>
-		<% @a = a.textAnswer %>
-		<% @tque = Questions.where(id: [a.questions_id]) %>
-		<% @tque.each do |q| %>
-			<% @q = q.textQuestion %>
-		<% end %>
+<% else %> <!-- Вывод ответов текущего пользователя, если они есть -->
+	<% @check %> <!-- Просто красивый вывод -->
+	<% @uaCurrent = Useranswer.where(users_id:[User.current.id]) %>
+	<% @uaCurrent.each do |u| %>
+		<p>
+			<% if @check != u.users_id or @check == nil %>
+				<% @userShow = User.where(id: [u.users_id]) %>
+				<% @userShow.each do |ushow| %>
+					<b>
+					Пользователь: 
+					<%= ushow.firstname %>
+					<%= ushow.lastname %>
+					</b>
+					<br>
+				<% end %>
+			<% @check = u.users_id %>
+			<% end %>	
+			<% @answe = Answers.where(id: [u.answers_id]) %>
+			<% @answe.each do |a| %>
+				<% @a = a.textAnswer %>
+				<% @tque = Questions.where(id: [a.questions_id]) %>
+				<% @tque.each do |q| %>
+					<% @q = q.textQuestion %>
+				<% end %>
+			<% end %>
+			Вопрос:
+			<%= @q %>?
+			<br>
+			Ответ:
+			<%= @a %>
+		</p>
 	<% end %>
-	Вопрос:
-	<%= @q %>?
-	<br>
-	Ответ:
-	<%= @a %>
-	</p>
-<% end %>
 <% end %>

@@ -1,20 +1,26 @@
 <h2>Новый вопрос</h2>
+
 <table>
-<tr>
-<td>
-	Вопрос: 
-	<% @txt %>
-	<%= text_field_tag 'newQuestion', @txt, {size: 50} %>
-</td>
-</tr>
-<tr>
-<td>
-Ответ А: <%= text_field_tag 'newQuestion', '', {size: 20} %>
-</td>
-</tr>
-<tr>
-	<td>Ответ Б: <%= text_field_tag 'newQuestion', '', {size: 20} %></td>
-	<td><%= button_to 'Добавить ответ', { :action => 'addAnswer', :controller => 'questions'}, :method => :post %></td>
-</tr>
+	<tr>
+		<td>
+			Вопрос: 
+			<%= text_field_tag 'newQuestion', '', :size => 50 %><!-- Поле ввода нового вопроса -->
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Ответ А: 
+			<%= text_field_tag 'newAnswerA', '', :size => 20 %><!-- Поле ввода ответа А -->
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Ответ Б: 
+			<%= text_field_tag 'newAnswerB', '', :size => 20 %><!-- Поле ввода ответа В -->
+		</td>
+		<td>
+			<%= button_to 'Добавить ответ', { :action => 'addAnswer', :controller => 'questions'}, :method => :post %><!-- Поле ввода n вопроса. Функция, создающая новое поле. -->
+		</td>
+	</tr>
 </table>
-<%= button_to 'Сохранить вопрос', { :action => 'saveAnswer', :controller => 'questions'}, :method => :post %>
+<%= button_to 'Сохранить вопрос', { :action => 'saveNewQuestion', :controller => 'questions'}, :method => :post%><!-- Сохранение нового вопроса и вариантов ответов(Questions; Answers) -->
