@@ -25,7 +25,19 @@ class QuestionsController < ApplicationController
   #Сохранение нового вопроса
   def saveNewQuestion
     #Questions.create(textQuestion: 'df')
-    flash[:notice] = 'New question was Saved'
+    Rails.logger.info "\e[31m " 
+    Rails.logger.info params[:post]        
+    Rails.logger.info "\e[0m"
+
+    @q = Questions.new
+    @q.textQuestion = params[:post][:newQuestion]
+    if @q.save
+      flash[:notice] = 'New question was Saved'          
+      redirect_to :action => 'index'
+    else
+      flash[:notice] = 'oops'          
+      redirect_to :action => 'index'
+    end    
   end
 
   #Сохранение ответа пользователя
