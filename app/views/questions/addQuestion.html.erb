@@ -1,26 +1,20 @@
-<h2>Новый вопрос</h2>
+<%= form_for :post, :url => { :action => 'saveNewQuestion', :controller => 'questions'} do |f| %>
+  <p>
+    <%= f.label 'Вопрос:' %><br>
+    <%= f.text_field :newQuestion %>
+  </p>
+ 
+  <p>
+    <%= f.label 'Ответ А:' %><br>
+    <%= f.text_field :newAnswerA %>
+  </p>
 
-<table>
-	<tr>
-		<td>
-			Вопрос: 
-			<%= text_field_tag 'newQuestion', '', :size => 50 %><!-- Поле ввода нового вопроса -->
-		</td>
-	</tr>
-	<tr>
-		<td>
-			Ответ А: 
-			<%= text_field_tag 'newAnswerA', '', :size => 20 %><!-- Поле ввода ответа А -->
-		</td>
-	</tr>
-	<tr>
-		<td>
-			Ответ Б: 
-			<%= text_field_tag 'newAnswerB', '', :size => 20 %><!-- Поле ввода ответа В -->
-		</td>
-		<td>
-			<%= button_to 'Добавить ответ', { :action => 'addAnswer', :controller => 'questions'}, :method => :post %><!-- Поле ввода n вопроса. Функция, создающая новое поле. -->
-		</td>
-	</tr>
-</table>
-<%= button_to 'Сохранить вопрос', { :action => 'saveNewQuestion', :controller => 'questions'}, :method => :post%><!-- Сохранение нового вопроса и вариантов ответов(Questions; Answers) -->
+  <p>
+    <%= f.label 'Ответ B' %><br>
+    <%= f.text_field :newAnswerB %>
+  </p>
+ 
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>

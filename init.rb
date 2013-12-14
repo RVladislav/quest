@@ -1,3 +1,5 @@
+require 'redmine'
+
 Redmine::Plugin.register :quest do
   name 'Quest plugin'
   author 'Vladislav R.'
