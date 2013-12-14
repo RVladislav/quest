@@ -1,8 +1,8 @@
 Redmine::Plugin.register :quest do
   name 'Quest plugin'
   author 'Vladislav R.'
-  description 'This is a plugin for Redmine'
+  description 'Survey plugin'
   version '0.0.1'
-  menu :application_menu, :questions, { :controller => 'questions', :action => 'index' }, :caption => 'Questions'
+  menu :top_menu, :questions, { :controller => 'questions', :action => 'index' }, :caption => 'Questions'
   #Вывод плагина в главном меню redmine
 end
