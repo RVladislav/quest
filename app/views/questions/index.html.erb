@@ -14,6 +14,9 @@
 			<tr>
 					<% if User.current.admin == true %>
 						<td>
+							<%= button_to 'Показать результаты', { :action => 'showans', :controller => 'questions'}, :method => :post %> <!-- Показать результаты ответа -->
+						</td>					
+						<td>
 							<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
 						</td>
 						<td>
