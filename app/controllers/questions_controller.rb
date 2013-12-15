@@ -22,6 +22,12 @@ class QuestionsController < ApplicationController
     flash[:notice] = 'New answer was added'
   end
 
+  #Удаление всех ответов пользователей
+  def delAllAnswers
+    Useranswer.destroy_all
+    redirect_to :action => 'index'
+  end
+
   #Сохранение нового вопроса
   def saveNewQuestion
     Rails.logger.info "\e[31m " 

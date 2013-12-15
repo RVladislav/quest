@@ -12,12 +12,15 @@
 	<% if @check == false %> <!-- Если Вы не отвечали на вопросы -->
 		<table>
 			<tr>
-				<td>
 					<% if User.current.admin == true %>
-						<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
+						<td>
+							<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
+						</td>
+						<td>
+							<%= button_to 'Удалить все ответы', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
+						</td>
 						<!-- Добавление нового вопроса. Только администратор -->
-					<% end %>
-				</td>		
+					<% end %>		
 			</tr>
 		</table>
 		<% @i = 0 %> <!-- Порядковый номер вопроса и разное имя для группы radioButton -->
@@ -50,11 +53,14 @@
 				<td>
 					<%= button_to 'Показать результаты', { :action => 'showans', :controller => 'questions'}, :method => :post %> <!-- Показать результаты ответа -->
 				</td>
-				<td>
 					<% if User.current.admin == true %> <!-- Администратору видна кнопка добавления вопроса -->
-						<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
-					<% end %>
-				</td>		
+						<td>
+							<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
+						</td>
+						<td>
+							<%= button_to 'Удалить все ответы', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
+						</td>
+					<% end %>		
 			</tr>
 		</table>
 	<% end %>
