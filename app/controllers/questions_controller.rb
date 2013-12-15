@@ -13,6 +13,29 @@ class QuestionsController < ApplicationController
     @us = User.all
   end
 
+  #Удаление вопроса
+  def delQuestion
+    @dq = Questions.all
+
+    Rails.logger.info "\e[31m " 
+    Rails.logger.info params[:post]
+    Rails.logger.info "\e[0m"
+
+    if params[:post] != nil
+      @dq.each do |qd|
+        if params[:post][qd.id.to_s()] == '1'
+          Questions.destroy(qd.id)
+          @a = Answers.where(:questions_id => qd.id)
+          @u = Useranswer.where(:answers_id => Answers.where(:questions_id => qd.id))
+          @u.destroy_all
+          @a.destroy_all
+        end
+      end
+      flash[:notice] = 'Deleted'
+      redirect_to :action => 'index'
+    end
+  end
+
   #Добавление вопроса
   def addQuestion
   end
@@ -78,6 +101,9 @@ class QuestionsController < ApplicationController
         flash[:notice] = 'oops'          
         redirect_to :action => 'index'
       end 
+    else
+      flash[:notice] = 'oops. Question was empty' #Если вопрос пустой 
+      redirect_to :action => 'index'        
     end   
   end
 

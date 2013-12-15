@@ -13,4 +13,5 @@ RedmineApp::Application.routes.draw do
   match '/questions/addAnswer', :to => 'questions#addAnswer', :via => [:get, :post] #Добавить новый вариант ответа  
   match '/questions/saveNewQuestion', :to => 'questions#saveNewQuestion', :via => [:get, :post] #Сохранить новый вопрос
   match '/questions/delAllAnswers', :to => 'questions#delAllAnswers', :via => [:get, :post]#Удаление всех ответов пользователей
+  match '/questions/delQuestion', :to => 'questions#delQuestion', :via => [:get, :post]#Удаление вопроса
 end
