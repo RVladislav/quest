@@ -1,56 +1,61 @@
 <h2>Анкета</h2>
-
-<% @check = false %> <!-- Если пользователь администратор: кнопка "Добавить вопрос"; Если ответы есть: кнопка "Посмотреть результаты" -->
-<% @ua.each do |ch| %>
-	<% ch.users_id %>
-	<% if ch.users_id == User.current.id %>
-		<% @check = true %>
+<% if User.current.lastname == 'Anonymous' %>
+	<b>Авторизуйтесь, чтобы отвечать на вопросы</b>
+<% else %>
+	<% @check = false %> <!-- Если пользователь администратор: кнопка "Добавить вопрос"; Если ответы есть: кнопка "Посмотреть результаты" -->
+	<% @ua.each do |ch| %>
+		<% ch.users_id %>
+		<% if ch.users_id == User.current.id %>
+			<% @check = true %>
+		<% end %>
 	<% end %>
-<% end %>
-<% if @check == false %> <!-- Если Вы не отвечали на вопросы -->
-	<table>
-		<tr>
-			<td>
-				<% if User.current.admin == true %>
-					<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
-					<!-- Добавление нового вопроса. Только администратор -->
-				<% end %>
-			</td>		
-		</tr>
-	</table>
-	<% @i = 1%> <!-- Порядковый номер вопроса и разное имя для группы radioButton -->
-	<% @ques.each do |q| %>
-		<p>
-			<%= @i %>)
-			<b>
-				<%= q.textQuestion %>? <!-- Вывод вопроса -->
-			</b>
-			<br>
-			<% @ansMany = Answers.where(questions_id: [q.id]) %> <!-- Вывод соответствующих вариантов ответа -->
-			<% @ansMany.each do |a| %>
+	<% if @check == false %> <!-- Если Вы не отвечали на вопросы -->
+		<table>
+			<tr>
+				<td>
+					<% if User.current.admin == true %>
+						<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
+						<!-- Добавление нового вопроса. Только администратор -->
+					<% end %>
+				</td>		
+			</tr>
+		</table>
+		<% @i = 0 %> <!-- Порядковый номер вопроса и разное имя для группы radioButton -->
+		<%= form_for :post, :url => { :action => 'saveUserAnswer', :controller => 'questions'} do |f| %>
+			<% @ques.each do |q| %>			
 				<p>
-					<%= radio_button_tag name = @i, 'true', false %><!-- Кнопка выбора -->
-					<%= a.textAnswer %> <!-- Текст ответа -->
-				</p>
+					<%= @i = @i + 1 %>)
+					<b>
+						<%= f.label q.textQuestion %>? <!-- Вывод вопроса -->
+					</b>
+					<br>
+					<% @ansMany = Answers.where(questions_id: [q.id]) %> <!-- Вывод соответствующих вариантов ответа -->
+					<% @ansMany.each do |a| %>
+						<p>
+							<%= f.radio_button @i, a.id %> <!-- Кнопка выбора -->
+							<%= f.label a.textAnswer %> <!-- Текст ответа -->
+						</p>
+					<% end %>					
+				</p>				
 			<% end %>
-			<% @i = @i + 1 %>
+			<%= f.submit 'Сохранить'%>
+		<% end %>
+		<!--<%= button_to 'Сохранить', { :action => 'saveUserAnswer', :controller => 'questions'}, :method => :post %> <!-- Сохранение ответа пользователя -->
+	<% else %> <!-- Если Вы отвечали на вопросы -->
+		<p>
+			Вы уже отвечали на вопросы
 		</p>
+		<table>
+			<tr>
+				<td>
+					<%= button_to 'Показать результаты', { :action => 'showans', :controller => 'questions'}, :method => :post %> <!-- Показать результаты ответа -->
+				</td>
+				<td>
+					<% if User.current.admin == true %> <!-- Администратору видна кнопка добавления вопроса -->
+						<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
+					<% end %>
+				</td>		
+			</tr>
+		</table>
 	<% end %>
-	<%= button_to 'Сохранить', { :action => 'saveUserAnswer', :controller => 'questions'}, :method => :post %> <!-- Сохранение ответа пользователя -->
-<% else %> <!-- Если Вы отвечали на вопросы -->
-	<p>
-		Вы уже отвечали на вопросы
-	</p>
-	<table>
-		<tr>
-			<td>
-				<%= button_to 'Показать результаты', { :action => 'showans', :controller => 'questions'}, :method => :post %> <!-- Показать результаты ответа -->
-			</td>
-			<td>
-				<% if User.current.admin == true %> <!-- Администратору видна кнопка добавления вопроса -->
-					<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
-				<% end %>
-			</td>		
-		</tr>
-	</table>
 <% end %>

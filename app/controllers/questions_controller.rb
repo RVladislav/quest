@@ -24,7 +24,6 @@ class QuestionsController < ApplicationController
 
   #Сохранение нового вопроса
   def saveNewQuestion
-    #Questions.create(textQuestion: 'df')
     Rails.logger.info "\e[31m " 
     Rails.logger.info params[:post]        
     Rails.logger.info "\e[0m"
@@ -78,9 +77,21 @@ class QuestionsController < ApplicationController
 
   #Сохранение ответа пользователя
   def saveUserAnswer 
-  	@userc = User.current.id
-    #Useranswer.create(users_id: @userc, answers_id: "3")
-  	flash[:notice] = 'Your answer was saved'
+    Rails.logger.info "\e[31m " 
+    Rails.logger.info params[:post]
+    Rails.logger.info "\e[0m"
+
+    if params[:post] != nil
+      for i in 1..Questions.count(:id) do
+        if params[:post][i.to_s()] != nil #Проверка, что ответ дан. Сохранение
+          @usAnswer = Useranswer.new
+          @usAnswer.users_id = User.current.id
+          @usAnswer.answers_id = params[:post][i.to_s()]
+          @usAnswer.save
+        end
+      end
+      flash[:notice] = 'Your answer was saved'
+    end
     redirect_to :action => 'index'
   end
 end
