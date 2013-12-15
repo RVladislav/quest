@@ -1,0 +1,11 @@
+<h2>Удаление вопросов</h2>
+
+<%= form_for :post, :url => { :action => 'delQuestion', :controller => 'questions'} do |f| %>
+    <% @dq.each do |d| %>   
+    		<%= f.check_box d.id %> 
+    		<%= f.label d.textQuestion %>?    
+      	<br>
+    <% end %>
+    <br>
+    <%= f.submit 'Удалить' %>
+<% end %>
