@@ -14,18 +14,25 @@
 			<tr>
 					<% if User.current.admin == true %>
 						<td>
-							<%= button_to 'Показать результаты', { :action => 'showans', :controller => 'questions'}, :method => :post %> <!-- Показать результаты ответа -->
+							<% if Questions.count(:id) != 0 %>
+								<%= button_to 'Показать результаты', { :action => 'showans', :controller => 'questions'}, :method => :post %> <!-- Показать результаты ответа -->
+							<% end %>
 						</td>					
 						<td>
 							<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
 						</td>
 						<td>
-							<%= button_to 'Удалить все ответы', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
+							<% if Questions.count(:id) != 0 and Useranswer.count(:id) != 0 %> <!-- Проверка наличия вопроса и ответа -->
+								<%= button_to 'Удалить все ответы', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
+							<% end %>
 						</td>
 						<!-- Добавление нового вопроса. Только администратор -->
 					<% end %>		
 			</tr>
 		</table>
+		<% if Questions.count(:id) == 0 %>
+			<b>Здесь пока нет вопросов</b>
+		<% end %>
 		<% @i = 0 %> <!-- Порядковый номер вопроса и разное имя для группы radioButton -->
 		<%= form_for :post, :url => { :action => 'saveUserAnswer', :controller => 'questions'} do |f| %>
 			<% @ques.each do |q| %>			
@@ -44,9 +51,11 @@
 					<% end %>					
 				</p>				
 			<% end %>
-			<%= f.submit 'Сохранить'%>
+			<% if Questions.count(:id) != 0 %>
+				<%= f.submit 'Сохранить'%>
+			<% end %>
 		<% end %>
-		<!--<%= button_to 'Сохранить', { :action => 'saveUserAnswer', :controller => 'questions'}, :method => :post %> <!-- Сохранение ответа пользователя -->
+
 	<% else %> <!-- Если Вы отвечали на вопросы -->
 		<p>
 			Вы уже отвечали на вопросы
