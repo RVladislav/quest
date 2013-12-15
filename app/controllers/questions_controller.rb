@@ -29,15 +29,50 @@ class QuestionsController < ApplicationController
     Rails.logger.info params[:post]        
     Rails.logger.info "\e[0m"
 
-    @q = Questions.new
-    @q.textQuestion = params[:post][:newQuestion]
-    if @q.save
-      flash[:notice] = 'New question was Saved'          
-      redirect_to :action => 'index'
-    else
-      flash[:notice] = 'oops'          
-      redirect_to :action => 'index'
-    end    
+    if params[:post][:newQuestion] != ''
+      @q = Questions.new
+      @q.textQuestion = params[:post][:newQuestion]
+      if @q.save
+        if params[:post][:newAnswerA] != ''
+          @a = Answers.new
+          @a.textAnswer = params[:post][:newAnswerA]
+          @a.questions_id = Questions.last[:id]
+          @a.save
+        else
+          @a = Answers.new
+          @a.textAnswer = 'yes'
+          @a.questions_id = Questions.last[:id]
+          @a.save
+        end
+        if params[:post][:newAnswerB] != ''
+          @a = Answers.new
+          @a.textAnswer = params[:post][:newAnswerB]
+          @a.questions_id = Questions.last[:id]
+          @a.save
+        else
+          @a = Answers.new
+          @a.textAnswer = 'no'
+          @a.questions_id = Questions.last[:id]
+          @a.save
+        end
+        if params[:post][:newAnswerC] != ''
+          @a = Answers.new
+          @a.textAnswer = params[:post][:newAnswerC]
+          @a.questions_id = Questions.last[:id]
+          @a.save
+        else
+          @a = Answers.new
+          @a.textAnswer = "don't know"
+          @a.questions_id = Questions.last[:id]
+          @a.save
+        end         
+        flash[:notice] = 'New question was Saved'          
+        redirect_to :action => 'index'      
+      else
+        flash[:notice] = 'oops'          
+        redirect_to :action => 'index'
+      end 
+    end   
   end
 
   #Сохранение ответа пользователя

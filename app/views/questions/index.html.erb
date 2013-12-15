@@ -26,7 +26,7 @@
 				<%= q.textQuestion %>? <!-- Вывод вопроса -->
 			</b>
 			<br>
-			<% @ansMany = Answers.where(questions_id: [@i]) %> <!-- Вывод соответствующих вариантов ответа -->
+			<% @ansMany = Answers.where(questions_id: [q.id]) %> <!-- Вывод соответствующих вариантов ответа -->
 			<% @ansMany.each do |a| %>
 				<p>
 					<%= radio_button_tag name = @i, 'true', false %><!-- Кнопка выбора -->
