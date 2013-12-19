@@ -26,7 +26,7 @@
 						</td>
 							<% if Questions.count(:id) != 0 and Useranswer.count(:id) != 0 %> <!-- Проверка наличия вопроса и ответа -->
 								<td>
-									<%= button_to 'Удалить все ответы', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
+									<%= button_to 'Тестировать заново', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
 								</td>
 							<% end %>
 						<!-- Добавление нового вопроса. Только администратор -->
@@ -47,11 +47,15 @@
 					<br>
 					<% @ansMany = Answers.where(questions_id: [q.id]) %> <!-- Вывод соответствующих вариантов ответа -->
 					<% @ansMany.each do |a| %>
-						<p>
+						<% if a.textAnswer != nil %>
 							<%= f.radio_button @i, a.id %> <!-- Кнопка выбора -->
 							<%= f.label a.textAnswer %> <!-- Текст ответа -->
-						</p>
-					<% end %>					
+							<br> <!-- Отступ с новой строки. Работает на все элементы -->					
+						<% end %>
+					<% end %>
+					<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id %><!-- Элемент, передающий id последнего варианта ответа -->
+					<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
+					<%= f.text_field @text %>	<!-- Свободное поле -->
 				</p>				
 			<% end %>
 			<% if Questions.count(:id) != 0 %>
@@ -76,7 +80,7 @@
 							<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
 						</td>
 						<td>
-							<%= button_to 'Удалить все ответы', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
+							<%= button_to 'Тестировать заново', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
 						</td>
 					<% end %>		
 			</tr>

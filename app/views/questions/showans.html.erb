@@ -18,7 +18,12 @@
 			<% end %>	
 			<% @answe = Answers.where(id: [u.answers_id]) %>
 			<% @answe.each do |a| %>
-				<% @a = a.textAnswer %> <!-- Непосредственно вывод ответов пользователя -->
+				<!-- Если вариант ответа пустой - вывод ответа(свободного) из UserAnswers -->
+				<%if a.textAnswer == nil%>
+					<% @a = u.answer_freeForm %>
+				<% else %>
+					<% @a = a.textAnswer %> <!-- Непосредственно вывод ответов пользователя -->
+				<% end %>
 				<% @tque = Questions.where(id: [a.questions_id]) %>
 				<% @tque.each do |q| %>
 					<% @q = q.textQuestion %> <!-- Вывод текста вопроса -->
@@ -48,7 +53,12 @@
 				<% end %>	
 				<% @answe = Answers.where(id: [u.answers_id]) %>
 				<% @answe.each do |a| %>
-					<% @a = a.textAnswer %>
+					<!-- Если вариант ответа пустой - вывод ответа(свободного) из UserAnswers -->
+					<%if a.textAnswer == nil%>
+						<% @a = u.answer_freeForm %>
+					<% else %>
+						<% @a = a.textAnswer %> <!-- Непосредственно вывод ответов пользователя -->
+					<% end %>
 					<% @tque = Questions.where(id: [a.questions_id]) %>
 					<% @tque.each do |q| %>
 						<% @q = q.textQuestion %>

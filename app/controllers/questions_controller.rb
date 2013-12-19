@@ -62,17 +62,16 @@ class QuestionsController < ApplicationController
       @q.textQuestion = params[:post][:newQuestion]
       if @q.save
         #Если все поля ответа пустые, заполняются базовые ответы
-        if params[:post][:newAnswerA] == '' and params[:post][:newAnswerB] == '' and params[:post][:newAnswerC] == ''
+        if params[:post][:newAnswerA] == '' and params[:post][:newAnswerB] == ''
           @a = Answers.new
           @a.textAnswer = 'yes'
-          @a.questions_id = Questions.last[:id]
+          @a.questions_id = Questions.last[:id]# Варианты ответа для последнего вопроса
           @a.save
           @a = Answers.new
           @a.textAnswer = 'no'
           @a.questions_id = Questions.last[:id]
           @a.save
           @a = Answers.new
-          @a.textAnswer = "don't know"
           @a.questions_id = Questions.last[:id]
           @a.save
         else
@@ -81,18 +80,18 @@ class QuestionsController < ApplicationController
             @a.textAnswer = params[:post][:newAnswerA]
             @a.questions_id = Questions.last[:id]
             @a.save
+            @a = Answers.new
+            @a.questions_id = Questions.last[:id]
+            @a.save            
           end
           if params[:post][:newAnswerB] != ''
             @a = Answers.new
             @a.textAnswer = params[:post][:newAnswerB]
             @a.questions_id = Questions.last[:id]
             @a.save
-          end
-          if params[:post][:newAnswerC] != ''
             @a = Answers.new
-            @a.textAnswer = params[:post][:newAnswerC]
             @a.questions_id = Questions.last[:id]
-            @a.save
+            @a.save            
           end  
         end       
         flash[:notice] = 'New question was Saved'          
@@ -119,6 +118,11 @@ class QuestionsController < ApplicationController
           @usAnswer = Useranswer.new
           @usAnswer.users_id = User.current.id
           @usAnswer.answers_id = params[:post][i.to_s()]
+          #Если поле выбора ответа пустое, что значит: был выбран свободный ответ, то помимо остальной информации в таблицу добавляем текст ответа
+          if Answers.where(:id => params[:post][i.to_s()]).last.textAnswer == nil
+            @text = '_' + params[:post][i.to_s()].to_s()
+            @usAnswer.answer_freeForm = params[:post][@text]
+          end
           @usAnswer.save
         end
       end
