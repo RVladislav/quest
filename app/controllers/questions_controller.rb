@@ -112,22 +112,28 @@ class QuestionsController < ApplicationController
     Rails.logger.info params[:post]
     Rails.logger.info "\e[0m"
 
-    if params[:post] != nil
-      for i in 1..Questions.count(:id) do
-        if params[:post][i.to_s()] != nil #Проверка, что ответ дан. Сохранение
-          @usAnswer = Useranswer.new
-          @usAnswer.users_id = User.current.id
-          @usAnswer.answers_id = params[:post][i.to_s()]
-          #Если поле выбора ответа пустое, что значит: был выбран свободный ответ, то помимо остальной информации в таблицу добавляем текст ответа
-          if Answers.where(:id => params[:post][i.to_s()]).last.textAnswer == nil
-            @text = '_' + params[:post][i.to_s()].to_s()
-            @usAnswer.answer_freeForm = params[:post][@text]
-          end
-          @usAnswer.save
+    if Useranswer.where(:users_id => User.current.id) != nil
+      Useranswer.destroy_all(:users_id => User.current.id)
+    end
+    for i in 1..Questions.count(:id) do
+      if params[:post][i.to_s()] != nil #Проверка, что ответ дан. Сохранение
+        @usAnswer = Useranswer.new
+        @usAnswer.users_id = User.current.id
+        @usAnswer.answers_id = params[:post][i.to_s()]
+        #Если поле выбора ответа пустое, что значит: был выбран свободный ответ, то помимо остальной информации в таблицу добавляем текст ответа
+        if Answers.where(:id => params[:post][i.to_s()]).last.textAnswer == nil
+          @text = '_' + params[:post][i.to_s()].to_s()
+          @usAnswer.answer_freeForm = params[:post][@text]
         end
+        @usAnswer.save
+        flash[:notice] = 'Your answer was saved'
+        @check = true #Если ответ сохранён(хотябы 1), то выводится сообщение и флаг => true
       end
-      flash[:notice] = 'Your answer was saved'
+    end
+    if @check != true #Если сохранений не было, выводим ошибку
+      flash[:error] = 'Empty answer not was saved'
     end
     redirect_to :action => 'index'
   end
+
 end

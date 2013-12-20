@@ -9,30 +9,37 @@
 			<% @check = true %>
 		<% end %>
 	<% end %>
-	<% if @check == false %> <!-- Если Вы не отвечали на вопросы -->
-		<table>
-			<tr>
-					<% if User.current.admin == true %>
-							<% if Questions.count(:id) != 0 %>
-								<td>
-									<%= button_to 'Показать результаты', { :action => 'showans', :controller => 'questions'}, :method => :post %> <!-- Показать результаты ответа -->
-								</td>
-								<td>
-									<%= button_to 'Удалить вопрос', { :action => 'delQuestion', :controller => 'questions'}, :method => :post %>
-								</td>
-							<% end %>					
+	<% if @check == true %> <!-- Если Вы отвечали на вопросы -->
+		<p>
+			<b>Вы уже отвечали на вопросы</b>
+		</p>
+		<!-- Показать результаты ответа -->
+		<%= button_to 'Показать результаты', { :action => 'showans', :controller => 'questions'}, :method => :post %>		
+	<% end %>
+		<% if User.current.admin == true %>
+			<table align="right">				
+				<tr>
+					<td>
+						<b>Администрирование</b>
+						<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
+					</td>
+				</tr>
+				<tr>
+					<% if Questions.count(:id) != 0 %>
 						<td>
-							<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
+							<%= button_to 'Удалить вопрос', { :action => 'delQuestion', :controller => 'questions'}, :method => :post %>
 						</td>
-							<% if Questions.count(:id) != 0 and Useranswer.count(:id) != 0 %> <!-- Проверка наличия вопроса и ответа -->
-								<td>
-									<%= button_to 'Тестировать заново', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
-								</td>
-							<% end %>
-						<!-- Добавление нового вопроса. Только администратор -->
-					<% end %>		
-			</tr>
-		</table>
+					<% end %>					
+				</tr>
+				<tr>
+					<td>
+						<% if Questions.count(:id) != 0 and Useranswer.count(:id) != 0 %> <!-- Проверка наличия вопроса и ответа -->
+							<%= button_to 'Тестировать заново', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
+						<% end %>
+					</td>
+				</tr>
+			</table>
+		<% end %>
 		<% if Questions.count(:id) == 0 %>
 			<b>Здесь пока нет вопросов</b>
 		<% end %>
@@ -58,32 +65,17 @@
 					<%= f.text_field @text %>	<!-- Свободное поле -->
 				</p>				
 			<% end %>
-			<% if Questions.count(:id) != 0 %>
-				<%= f.submit 'Сохранить'%>
+			<% if Questions.count(:id) != 0%>
+				<% if @check == false %>
+					<%= f.submit 'Сохранить'%>
+				<% else %>
+					<%= f.submit 'Перезаписать ответы'%>
+					<i>
+						<br>*Ваши ответы будут перезаписаны
+						<br>*Ваши предыдущие ответы удалятся, если не будут даны новые
+					</i>
+				<% end %>
 			<% end %>
 		<% end %>
 
-	<% else %> <!-- Если Вы отвечали на вопросы -->
-		<p>
-			Вы уже отвечали на вопросы
-		</p>
-		<table>
-			<tr>
-				<td>
-					<%= button_to 'Показать результаты', { :action => 'showans', :controller => 'questions'}, :method => :post %> <!-- Показать результаты ответа -->
-				</td>
-					<% if User.current.admin == true %> <!-- Администратору видна кнопка добавления вопроса -->
-						<td>
-							<%= button_to 'Удалить вопрос', { :action => 'delQuestion', :controller => 'questions'}, :method => :post %>
-						</td>
-						<td>
-							<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
-						</td>
-						<td>
-							<%= button_to 'Тестировать заново', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
-						</td>
-					<% end %>		
-			</tr>
-		</table>
-	<% end %>
 <% end %>
