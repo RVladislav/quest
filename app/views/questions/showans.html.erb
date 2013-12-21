@@ -72,6 +72,7 @@
 			</p>
 		<% end %>
 	<% end %>
+	<%= button_to 'Ответить заново', { :action => 'checkGoTo', :controller => 'questions'}, :method => :post %>
 <% else %>
 	<b>Никто пока не ответил не на один вопрос</b>
 <% end %>

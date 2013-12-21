@@ -1,9 +1,17 @@
 class QuestionsController < ApplicationController
-  unloadable
+  $reAns = false
   #Главная страница приложения
   def index
 	  @ques = Questions.all
     @ua = Useranswer.all
+    if $reAns == false
+      redirect_to '/questions/showans'
+    end
+  end
+
+  def checkGoTo
+    $reAns = true
+    redirect_to :action => 'index'
   end
 
   #Просмотр ответов
@@ -127,6 +135,7 @@ class QuestionsController < ApplicationController
         end
         @usAnswer.save
         flash[:notice] = 'Your answer was saved'
+        $reAns = false
         @check = true #Если ответ сохранён(хотябы 1), то выводится сообщение и флаг => true
       end
     end
