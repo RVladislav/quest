@@ -1,38 +1,39 @@
 <h2>Просмотр ответов</h2>
+<%= render :file => 'questions/admin.html' %> <!-- Вывод панели администратора -->
 <% if Useranswer.count != 0 %> <!-- Проверка наличия ответов -->
 	<% if User.current.admin == true %> <!-- Проверка для вывода имени. Имеет вид: имя пользователя <br> все его ответы -->
-	<% @check %>
-	<% @ua.each do |u| %> <!-- Вывод всех ответов всех пользователей, т.к. (User.current.admin == true) пользователь - администратор-->
-		<p>
-			<% if @check != u.users_id or @check == nil %> <!-- Просто красивый вывод -->
-				<% @userShow = User.where(id: [u.users_id]) %>
-				<% @userShow.each do |ushow| %>
-					<b>
-					Пользователь: 
-					<%= ushow.firstname %> <!-- Непосредственно имя и фамилия пользователя -->
-					<%= ushow.lastname %>
-					</b>
-					<br>
+		<% @check %>
+		<% @ua.each do |u| %> <!-- Вывод всех ответов всех пользователей, т.к. (User.current.admin == true) пользователь - администратор-->
+			<p>
+				<% if @check != u.users_id or @check == nil %> <!-- Просто красивый вывод -->
+					<% @userShow = User.where(id: [u.users_id]) %>
+					<% @userShow.each do |ushow| %>
+						<b>
+						Пользователь: 
+						<%= ushow.firstname %> <!-- Непосредственно имя и фамилия пользователя -->
+						<%= ushow.lastname %>
+						</b>
+						<br>
+					<% end %>
+					<% @check = u.users_id %> <!-- Данная процедура исключает дублирование имени и фамилии пользователя над каждым вопросом -->
+				<% end %>	
+				<% @answe = Answers.where(id: [u.answers_id]) %>
+				<% @answe.each do |a| %>
+					<!-- Если вариант ответа пустой - вывод ответа(свободного) из UserAnswers -->
+					<%if a.textAnswer == nil%>
+						<% @a = u.answer_freeForm %>
+					<% else %>
+						<% @a = a.textAnswer %> <!-- Непосредственно вывод ответов пользователя -->
+					<% end %>
+					<% @tque = Questions.where(id: [a.questions_id]) %>
+					<% @tque.each do |q| %>
+						<% @q = q.textQuestion %> <!-- Вывод текста вопроса -->
+					<% end %>
 				<% end %>
-				<% @check = u.users_id %> <!-- Данная процедура исключает дублирование имени и фамилии пользователя над каждым вопросом -->
-			<% end %>	
-			<% @answe = Answers.where(id: [u.answers_id]) %>
-			<% @answe.each do |a| %>
-				<!-- Если вариант ответа пустой - вывод ответа(свободного) из UserAnswers -->
-				<%if a.textAnswer == nil%>
-					<% @a = u.answer_freeForm %>
-				<% else %>
-					<% @a = a.textAnswer %> <!-- Непосредственно вывод ответов пользователя -->
-				<% end %>
-				<% @tque = Questions.where(id: [a.questions_id]) %>
-				<% @tque.each do |q| %>
-					<% @q = q.textQuestion %> <!-- Вывод текста вопроса -->
-				<% end %>
-			<% end %>
-			Вопрос: <%= @q %>? <!-- Вывод -->
-			<br>
-			Ответ: <%= @a %> <!-- Вывод -->
-		</p>
+				Вопрос: <%= @q %>? <!-- Вывод -->
+				<br>
+				Ответ: <%= @a %> <!-- Вывод -->
+			</p>
 	<% end %>
 	<% else %> <!-- Вывод ответов текущего пользователя, если они есть -->
 		<% @check %> <!-- Просто красивый вывод -->
@@ -72,7 +73,7 @@
 			</p>
 		<% end %>
 	<% end %>
-	<%= button_to 'Ответить заново', { :action => 'checkGoTo', :controller => 'questions'}, :method => :post %>
+	<%= button_to 'Ответить на вопросы', { :action => 'checkGoTo', :controller => 'questions'}, :method => :post %>
 <% else %>
 	<b>Никто пока не ответил не на один вопрос</b>
 <% end %>

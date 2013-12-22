@@ -1,4 +1,5 @@
 <h2>Анкета</h2>
+<%= render :file => 'questions/admin.html' %> <!-- Вывод панели администратора -->
 <% if User.current.lastname == 'Anonymous' %>
 	<b>Авторизуйтесь, чтобы отвечать на вопросы</b>
 <% else %>
@@ -14,30 +15,6 @@
 			<b>Вы уже отвечали на вопросы</b>
 		</p>
 	<% end %>
-		<% if User.current.admin == true %>
-			<table align="right">				
-				<tr>
-					<td>
-						<b>Администрирование</b>
-						<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
-					</td>
-				</tr>
-				<tr>
-					<% if Questions.count(:id) != 0 %>
-						<td>
-							<%= button_to 'Удалить вопрос', { :action => 'delQuestion', :controller => 'questions'}, :method => :post %>
-						</td>
-					<% end %>					
-				</tr>
-				<tr>
-					<td>
-						<% if Questions.count(:id) != 0 and Useranswer.count(:id) != 0 %> <!-- Проверка наличия вопроса и ответа -->
-							<%= button_to 'Тестировать заново', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
-						<% end %>
-					</td>
-				</tr>
-			</table>
-		<% end %>
 		<% if Questions.count(:id) == 0 %>
 			<b>Здесь пока нет вопросов</b>
 		<% end %>
@@ -58,17 +35,14 @@
 							<br> <!-- Отступ с новой строки. Работает на все элементы -->					
 						<% end %>
 					<% end %>
-					<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id %><!-- Элемент, передающий id последнего варианта ответа -->
+					<% @rt = @i.to_s() + '_'+Answers.where(questions_id: [q.id]).last.id.to_s() %>
+					<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id, :checked => @radioFocus?true : false %><!-- Элемент, передающий id последнего варианта ответа -->
 					<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
 					<%= f.text_field @text %>	<!-- Свободное поле -->
 				</p>				
 			<% end %>
 			<% if Questions.count(:id) != 0%>
 				<%= f.submit 'Сохранить'%>
-				<br>
-				<i>
-					*Ваши ответы будут перезаписаны
-				</i>
 			<% end %>
 		<% end %>
 
