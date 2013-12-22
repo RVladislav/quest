@@ -36,7 +36,7 @@
 						<% end %>
 					<% end %>
 					<% @rt = @i.to_s() + '_'+Answers.where(questions_id: [q.id]).last.id.to_s() %>
-					<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id, :checked => @radioFocus?true : false %><!-- Элемент, передающий id последнего варианта ответа -->
+					<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id %><!-- Элемент, передающий id последнего варианта ответа -->
 					<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
 					<%= f.text_field @text %>	<!-- Свободное поле -->
 				</p>				

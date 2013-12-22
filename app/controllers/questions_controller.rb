@@ -4,15 +4,19 @@ class QuestionsController < ApplicationController
 
   #Главная страница приложения
   def index
-	  @ques = Questions.all
+    @ques = Questions.all
     @ua = Useranswer.all
-    @radioFocus = false #Проверка radio_button. При вводе текста в поле
-    if $reAns == false and $doneAns == true and Useranswer.where(users_id: [User.current.id]).count != 0 #Проверка на переадресацию
+    #Показывает ответы, если:
+    #- Мы ответили
+    #- Ответы на даются заново(переответ)
+    #- Ответы есть
+    if $reAns == false and $doneAns == true and Useranswer.where(users_id: [User.current.id]).count != 0
       redirect_to '/questions/showans'
     end
+    $reAns = false #Чтобы при смене пользователя опять показывались ответы, если они есть
   end
 
-  #Проверка на переадресацию index
+  #Переадресация на index
   def checkGoTo
     $reAns = true
     redirect_to :action => 'index'
