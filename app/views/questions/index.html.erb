@@ -11,9 +11,7 @@
 		<% end %>
 	<% end %>
 	<% if @check == true %> <!-- Если Вы отвечали на вопросы -->
-		<p>
-			<b>Вы уже отвечали на вопросы</b>
-		</p>
+		
 	<% end %>
 		<% if Questions.count(:id) == 0 %>
 			<b>Здесь пока нет вопросов</b>
@@ -30,15 +28,27 @@
 					<% @ansMany = Answers.where(questions_id: [q.id]) %> <!-- Вывод соответствующих вариантов ответа -->
 					<% @ansMany.each do |a| %>
 						<% if a.textAnswer != nil %>
-							<%= f.radio_button @i, a.id %> <!-- Кнопка выбора -->
+							<% if Useranswer.where(answers_id: [a.id]).first != nil %>
+								<%= f.radio_button @i, a.id, checked: true %> <!-- Кнопка выбора -->
+							<% else %>
+								<%= f.radio_button @i, a.id %>
+							<% end %>
 							<%= f.label a.textAnswer %> <!-- Текст ответа -->
 							<br> <!-- Отступ с новой строки. Работает на все элементы -->					
 						<% end %>
 					<% end %>
-					<% @rt = @i.to_s() + '_'+Answers.where(questions_id: [q.id]).last.id.to_s() %>
-					<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id %><!-- Элемент, передающий id последнего варианта ответа -->
-					<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
-					<%= f.text_field @text %>	<!-- Свободное поле -->
+					<!-- Если ответы были даны, отмечает старые ответы -->
+					<% if @currentUs.where(answers_id: [Answers.where(questions_id: [q.id]).count]).first != nil %>
+						<!-- Элемент, передающий id последнего варианта ответа -->
+						<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id, checked: true %>
+						<!-- Вывод текста ответа -->
+						<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
+						<%= f.text_field @text, value: @currentUs.first.answer_freeForm %>
+					<% else %>
+						<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id %>
+						<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
+						<%= f.text_field @text %>	<!-- Свободное поле -->
+					<% end %>
 				</p>				
 			<% end %>
 			<% if Questions.count(:id) != 0%>

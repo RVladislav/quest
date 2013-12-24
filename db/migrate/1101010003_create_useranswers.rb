@@ -3,6 +3,7 @@ class CreateUseranswers < ActiveRecord::Migration
     create_table :useranswers do |t|
       t.belongs_to :users #Связь с таблицей Users
       t.belongs_to :answers #Связь с таблицей Answers
+      t.string :answer_freeForm
     end
   end
   def self.down

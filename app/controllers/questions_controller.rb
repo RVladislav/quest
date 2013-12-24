@@ -1,25 +1,10 @@
 class QuestionsController < ApplicationController
-  $reAns = false #Глобальная переменная для передачи значений переменной
-  $doneAns = false
-
+  unloadable
   #Главная страница приложения
   def index
-    @ques = Questions.all
+	  @ques = Questions.all
     @ua = Useranswer.all
-    #Показывает ответы, если:
-    #- Мы ответили
-    #- Ответы на даются заново(переответ)
-    #- Ответы есть
-    if $reAns == false and $doneAns == true and Useranswer.where(users_id: [User.current.id]).count != 0
-      redirect_to '/questions/showans'
-    end
-    $reAns = false #Чтобы при смене пользователя опять показывались ответы, если они есть
-  end
-
-  #Переадресация на index
-  def checkGoTo
-    $reAns = true
-    redirect_to :action => 'index'
+    @currentUs = Useranswer.where(users_id: User.current.id)
   end
 
   #Просмотр ответов
@@ -64,7 +49,6 @@ class QuestionsController < ApplicationController
   #Удаление всех ответов пользователей
   def delAllAnswers
     Useranswer.destroy_all
-    $doneAns = false
     redirect_to :action => 'index'
   end
 
@@ -144,9 +128,7 @@ class QuestionsController < ApplicationController
         end
         @usAnswer.save
         flash[:notice] = 'Your answer was saved'
-        $reAns = false
         @check = true #Если ответ сохранён(хотябы 1), то выводится сообщение и флаг => true
-        $doneAns = true
       end
     end
     if @check != true #Если сохранений не было, выводим ошибку

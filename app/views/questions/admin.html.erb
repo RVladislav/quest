@@ -1,24 +1,31 @@
-<% if User.current.admin == true %><!-- Панель администратора. Набор кнопок с функциями -->
-		<table align="right">				
-			<tr>
+<% if User.current.admin == true %>
+	<table align="right">				
+		<tr>
+			<td>
+				<b>Администрирование</b>
+				<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
+			</td>
+		</tr>
+		<tr>
+			<% if Questions.count(:id) != 0 %>
 				<td>
-					<b>Администрирование</b>
-					<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
+					<%= button_to 'Удалить вопрос', { :action => 'delQuestion', :controller => 'questions'}, :method => :post %>
 				</td>
-			</tr>
-			<tr>
-				<% if Questions.count(:id) != 0 %>
-					<td>
-						<%= button_to 'Удалить вопрос', { :action => 'delQuestion', :controller => 'questions'}, :method => :post %>
-					</td>
-				<% end %>					
-			</tr>
-			<tr>
+			<% end %>					
+		</tr>
+		<tr>
+			<% if Useranswer.count != 0 %>
 				<td>
-					<% if Questions.count(:id) != 0 and Useranswer.count(:id) != 0 %> <!-- Проверка наличия вопроса и ответа -->
-						<%= button_to 'Тестировать заново', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
-					<% end %>
+					<%= button_to 'Посмотреть результаты', { :action => 'showans', :controller => 'questions'}, :method => :post %>
 				</td>
-			</tr>			
-		</table>
+			<% end %>					
+		</tr>
+		<tr>
+			<td>
+				<% if Questions.count(:id) != 0 and Useranswer.count(:id) != 0 %> <!-- Проверка наличия вопроса и ответа -->
+					<%= button_to 'Тестировать заново', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
+				<% end %>
+			</td>
+		</tr>
+	</table>
 <% end %>
