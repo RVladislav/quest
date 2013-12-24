@@ -1,3 +1,10 @@
+<head>
+	<script type="text/javascript">
+	function SelectRB (path) {
+		document.getElementById(path).checked = true;
+	}
+	</script>
+</head>
 <h2>Анкета</h2>
 <%= render :file => 'questions/admin.html' %> <!-- Вывод панели администратора -->
 <% if User.current.lastname == 'Anonymous' %>
@@ -45,9 +52,10 @@
 						<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
 						<%= f.text_field @text, value: @currentUs.first.answer_freeForm %>
 					<% else %>
-						<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id %>
+						<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id, :id => @i.to_s() %>
 						<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
-						<%= f.text_field @text %>	<!-- Свободное поле -->
+						<% @t = 'SelectRB('+@i.to_s()+')' %>
+						<%= f.text_field @text, onChange:@t.to_s() %>	<!-- Свободное поле -->
 					<% end %>
 				</p>				
 			<% end %>
