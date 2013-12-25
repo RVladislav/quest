@@ -46,7 +46,6 @@
 							<br> <!-- Отступ с новой строки. Работает на все элементы -->					
 						<% end %>
 					<% end %>
-					<% @usa = Useranswer.where(users_id: User.current.id) %>
 					<!-- Если ответы были даны, отмечает старые ответы -->
 					<% if @checkFreeAnswer == false and Useranswer.where(answers_id: Answers.where(questions_id: q.id)).count != 0 %> <!-- Если ответов не было - ответ free И ответы есть -->
 						<% @checkFreeAnswer = true %> <!-- помечаем, что ответ дан -->
