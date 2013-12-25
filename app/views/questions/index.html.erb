@@ -32,11 +32,13 @@
 						<%= f.label q.textQuestion %>? <!-- Вывод вопроса -->
 					</b>
 					<br>
+					<% @checkFreeAnswer = false %> <!-- Ответ не выделен -->
 					<% @ansMany = Answers.where(questions_id: [q.id]) %> <!-- Вывод соответствующих вариантов ответа -->
 					<% @ansMany.each do |a| %>
 						<% if a.textAnswer != nil %>
 							<% if Useranswer.where(answers_id: [a.id]).first != nil %>
 								<%= f.radio_button @i, a.id, checked: true, class: "radio" %> <!-- Кнопка выбора -->
+								<% @checkFreeAnswer = true %><!-- Если это ответ пользователя, помечаем, что ответ есть -->
 							<% else %>
 								<%= f.radio_button @i, a.id %>
 							<% end %>
@@ -45,12 +47,13 @@
 						<% end %>
 					<% end %>
 					<!-- Если ответы были даны, отмечает старые ответы -->
-					<% if @currentUs.where(answers_id: [Answers.where(questions_id: [q.id]).count]).first != nil %>
+					<% if @checkFreeAnswer == false and Useranswer.count != 0 %> <!-- Если ответов не было - ответ free И ответы есть -->
+						<% @checkFreeAnswer = true %> <!-- помечаем, что ответ дан -->
 						<!-- Элемент, передающий id последнего варианта ответа -->
 						<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id, checked: true %>
 						<!-- Вывод текста ответа -->
 						<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
-						<%= f.text_field @text, value: @currentUs.first.answer_freeForm %>
+						<%= f.text_field @text, value: Useranswer.where(answers_id: Answers.where(questions_id: [q.id])).last.answer_freeForm %>
 					<% else %>
 						<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id, :id => @i.to_s() %>
 						<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
