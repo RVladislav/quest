@@ -3,27 +3,27 @@
 		<tr>
 			<td>
 				<b>Администрирование</b>
-				<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post %>
+				<%= button_to 'Добавить вопрос', { :action => 'addQuestion', :controller => 'questions'}, :method => :post, id: 'butAddQ' %>
 			</td>
 		</tr>
 		<tr>
 			<% if Questions.count(:id) != 0 %>
 				<td>
-					<%= button_to 'Удалить вопрос', { :action => 'delQuestion', :controller => 'questions'}, :method => :post %>
+					<%= button_to 'Удалить вопрос', { :action => 'delQuestion', :controller => 'questions'}, :method => :post, id: 'butDelQ' %>
 				</td>
 			<% end %>					
 		</tr>
 		<tr>
 			<% if Useranswer.count != 0 %>
 				<td>
-					<%= button_to 'Посмотреть результаты', { :action => 'showans', :controller => 'questions'}, :method => :post %>
+					<%= button_to 'Результаты', { :action => 'showans', :controller => 'questions'}, :method => :post, id: 'butShowResult' %>
 				</td>
 			<% end %>					
 		</tr>
 		<tr>
 			<td>
 				<% if Questions.count(:id) != 0 and Useranswer.count(:id) != 0 %> <!-- Проверка наличия вопроса и ответа -->
-					<%= button_to 'Тестировать заново', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post %>
+					<%= button_to 'Ретест', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post, id: 'butTest' %>
 				<% end %>
 			</td>
 		</tr>
