@@ -46,15 +46,16 @@
 							<br> <!-- Отступ с новой строки. Работает на все элементы -->					
 						<% end %>
 					<% end %>
+					<% @usa = Useranswer.where(users_id: User.current.id) %>
 					<!-- Если ответы были даны, отмечает старые ответы -->
-					<% if @checkFreeAnswer == false and Useranswer.count != 0 %> <!-- Если ответов не было - ответ free И ответы есть -->
+					<% if @checkFreeAnswer == false and Useranswer.where(answers_id: Answers.where(questions_id: q.id)).count != 0 %> <!-- Если ответов не было - ответ free И ответы есть -->
 						<% @checkFreeAnswer = true %> <!-- помечаем, что ответ дан -->
 						<!-- Элемент, передающий id последнего варианта ответа -->
-						<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id, checked: true %>
+						<%= f.radio_button @i, Useranswer.where(answers_id: Answers.where(questions_id: [q.id]).last.id), checked: true %>
 						<!-- Вывод текста ответа -->
 						<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
 						<% if Useranswer.where(answers_id: Answers.where(questions_id: [q.id])).last != nil %>
-						<%= f.text_field @text, value: Useranswer.where(answers_id: Answers.where(questions_id: [q.id])).last.answer_freeForm %>
+							<%= f.text_field @text, value: Useranswer.where(answers_id: Answers.where(questions_id: [q.id])).last.answer_freeForm %>
 						<% else %>
 							<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
 							<% @t = 'SelectRB('+@i.to_s()+')' %>
