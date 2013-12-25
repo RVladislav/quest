@@ -53,7 +53,13 @@
 						<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id, checked: true %>
 						<!-- Вывод текста ответа -->
 						<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
+						<% if Useranswer.where(answers_id: Answers.where(questions_id: [q.id])).last != nil %>
 						<%= f.text_field @text, value: Useranswer.where(answers_id: Answers.where(questions_id: [q.id])).last.answer_freeForm %>
+						<% else %>
+							<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
+							<% @t = 'SelectRB('+@i.to_s()+')' %>
+							<%= f.text_field @text, onChange:@t.to_s() %>
+						<% end %>
 					<% else %>
 						<%= f.radio_button @i, Answers.where(questions_id: [q.id]).last.id, :id => @i.to_s() %>
 						<% @text = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
