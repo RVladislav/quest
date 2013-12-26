@@ -73,6 +73,7 @@ class QuestionsController < ApplicationController
           @a.questions_id = Questions.last[:id]
           @a.save
           @a = Answers.new
+          @a.textAnswer = nil
           @a.questions_id = Questions.last[:id]
           @a.save
         else

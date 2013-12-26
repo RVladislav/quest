@@ -23,7 +23,7 @@
 		<tr>
 			<td>
 				<% if Questions.count(:id) != 0 and Useranswer.count(:id) != 0 %> <!-- Проверка наличия вопроса и ответа -->
-					<%= button_to 'Ретест', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post, id: 'butTest' %>
+					<% button_to 'Ретест', { :action => 'delAllAnswers', :controller => 'questions'}, :method => :post, id: 'butTest' %><!-- off visible! -->
 				<% end %>
 			</td>
 		</tr>
