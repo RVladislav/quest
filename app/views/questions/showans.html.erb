@@ -51,12 +51,12 @@
 						</b>
 						<br>
 					<% end %>
-				<% @check = u.users_id %>
+					<% @check = u.users_id %>
 				<% end %>	
 				<% @answe = Answers.where(id: [u.answers_id]) %>
 				<% @answe.each do |a| %>
 					<!-- Если вариант ответа пустой - вывод ответа(свободного) из UserAnswers -->
-					<%if a.textAnswer == nil%>
+					<% if a.textAnswer == nil %>
 						<% @a = u.answer_freeForm %>
 					<% else %>
 						<% @a = a.textAnswer %> <!-- Непосредственно вывод ответов пользователя -->

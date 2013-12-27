@@ -77,24 +77,41 @@ class QuestionsController < ApplicationController
           @a.questions_id = Questions.last[:id]
           @a.save
         else
-          if params[:post][:newAnswerA] != '' #Добавление 
+          if params[:post][:newAnswerA] != '' and params[:post][:newAnswerB] != ''
             @a = Answers.new
             @a.textAnswer = params[:post][:newAnswerA]
-            @a.questions_id = Questions.last[:id]
+            @a.questions_id = Questions.last[:id]# Варианты ответа для последнего вопроса
             @a.save
-            @a = Answers.new
-            @a.questions_id = Questions.last[:id]
-            @a.save            
-          end
-          if params[:post][:newAnswerB] != ''
             @a = Answers.new
             @a.textAnswer = params[:post][:newAnswerB]
             @a.questions_id = Questions.last[:id]
             @a.save
             @a = Answers.new
+            @a.textAnswer = nil
             @a.questions_id = Questions.last[:id]
-            @a.save            
-          end  
+            @a.save
+          else
+            if params[:post][:newAnswerA] != '' #Добавление 
+              @a = Answers.new
+              @a.textAnswer = params[:post][:newAnswerA]
+              @a.questions_id = Questions.last[:id]
+              @a.save
+              @a = Answers.new
+              @a.textAnswer = nil
+              @a.questions_id = Questions.last[:id]
+              @a.save            
+            end
+            if params[:post][:newAnswerB] != ''
+              @a = Answers.new
+              @a.textAnswer = params[:post][:newAnswerB]
+              @a.questions_id = Questions.last[:id]
+              @a.save
+              @a = Answers.new
+              @a.textAnswer = nil
+              @a.questions_id = Questions.last[:id]
+              @a.save            
+            end 
+          end         
         end       
         flash[:notice] = 'New question was Saved'          
         redirect_to :action => 'index'      

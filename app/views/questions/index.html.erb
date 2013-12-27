@@ -6,8 +6,28 @@
 	}
 	</script>
 </head>
+<!-- Все ответы пользователя -->
+<% @uaCurrent = Useranswer.where(users_id:[User.current.id]) %>
+<% @answersAns = Array.new(@uaCurrent.count) %>
+<% @j = 1 %>
+<% @uaCurrent.each do |u| %>
+	<% @answe = Answers.where(id: [u.answers_id]) %>
+	<% @answe.each do |a| %>
+			<% @a = a.id %> <!-- Непосредственно вывод ответов пользователя -->
+	<% end %>
+	<% @answersAns[@j] = @a %>
+	<% @j = @j + 1 %>
+<% end %>
+<!-- Массив id ответов -->
+<% @answersAns %>
+
 <h2><font color='black'>Мероприятия - </font>Красное озеро</h2>
-<h3><font color='black'><i><%= User.current.firstname %> <%= User.current.lastname %></i></font></h3>
+<h3><font color='black'><i>
+	<% if User.current.lastname != 'Anonymous' %>
+		<%= User.current.firstname %> 
+		<%= User.current.lastname %>
+	<% end %>
+</i></font></h3>
 <% if User.current.lastname == 'Anonymous' %>
 	<b>Авторизуйтесь, чтобы отвечать на вопросы</b>
 <% else %>
@@ -35,14 +55,22 @@
 					<br>
 					<% @ansMany = Answers.where(questions_id: [q.id]) %> <!-- Вывод соответствующих вариантов ответа -->
 					<% @ansMany.each do |a| %>
-						<%= f.radio_button @i, a.id, id: a.id %>
-						<%= f.label a.textAnswer %> <!-- Текст ответа -->
-						<% if a.textAnswer == nil %>			
-							<% @t = 'SelectRB('+a.id.to_s()+')' %>
-							<% @te = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
-							<%= f.text_field @te, onChange:@t.to_s() %>
-						<% end %>
-						<br> <!-- Отступ с новой строки. Работает на все элементы -->					
+								<% @textValue = nil %>					
+								<% if @answersAns.include?(a.id) and User.current.id == Useranswer.where(answers_id: a.id, users_id: User.current.id).last.users_id %><!-- Проверка на наличие данного ответа. Если так, то отмечаем -->
+									<%= f.radio_button @i, a.id, id: a.id, checked: true %>
+									<% if Answers.where(id: a.id).last.textAnswer == nil %>
+										<% @textValue = Useranswer.where(answers_id: a.id, users_id: User.current.id).last.answer_freeForm %>
+									<% end %>
+								<% else %>
+									<%= f.radio_button @i, a.id, id: a.id %>
+								<% end %>
+								<%= f.label a.textAnswer %> <!-- Текст ответа -->
+								<% if a.textAnswer == nil %>		
+									<% @t = 'SelectRB('+a.id.to_s()+')' %> <!-- JavaScript. Автоматический выбор текстового поля -->
+									<% @te = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
+									<%= f.text_field @te, onChange:@t.to_s(), value: @textValue %>
+								<% end %>
+						<br>			
 					<% end %>
 
 					<br><img id="spl">
