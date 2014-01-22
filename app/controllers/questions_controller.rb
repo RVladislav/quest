@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   unloadable
+  $num = 0
   #Главная страница приложения
   def index
 	  @ques = Questions.all
@@ -130,19 +131,25 @@ class QuestionsController < ApplicationController
     Rails.logger.info "\e[31m " 
     Rails.logger.info params[:post]
     Rails.logger.info "\e[0m"
-
-    if Useranswer.where(:users_id => User.current.id) != nil
-      Useranswer.destroy_all(:users_id => User.current.id)
-    end
+    $num = $num + 1
+    #if Useranswer.where(:users_id => User.current.id) != nil
+    #  Useranswer.destroy_all(:users_id => User.current.id)
+    #end
     for i in 1..Questions.count(:id) do
       if params[:post][i.to_s()] != nil #Проверка, что ответ дан. Сохранение
+        @newUser = Allusers.new
         @usAnswer = Useranswer.new
-        @usAnswer.users_id = User.current.id
+        @usAnswer.users_id = $num
         @usAnswer.answers_id = params[:post][i.to_s()]
         #Если поле выбора ответа пустое, что значит: был выбран свободный ответ, то помимо остальной информации в таблицу добавляем текст ответа
         if Answers.where(:id => params[:post][i.to_s()]).last.textAnswer == nil
           @text = '_' + params[:post][i.to_s()].to_s()
-          @usAnswer.answer_freeForm = params[:post][@text]
+          #@usAnswer.answer_freeForm = params[:post][@text]          
+          @newUser.userid = $num
+          @newUser.fio = params[:post][@text]
+        end
+        if Answers.where(:id => params[:post][i.to_s()]).last.textAnswer == nil
+          @newUser.save
         end
         @usAnswer.save
         flash[:notice] = 'Your answer was saved'

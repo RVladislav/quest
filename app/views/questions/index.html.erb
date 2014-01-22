@@ -55,7 +55,8 @@
 					<% @ansMany.each do |a| %>
 								<% @textValue = nil %>					
 								<% if @answersAns.include?(a.id) and User.current.id == Useranswer.where(answers_id: a.id, users_id: User.current.id).last.users_id %><!-- Проверка на наличие данного ответа. Если так, то отмечаем -->
-									<%= f.radio_button @i, a.id, id: a.id, checked: true %>
+									<!--<%= f.radio_button @i, a.id, id: a.id, checked: true %>-->
+										<%= f.radio_button @i, a.id, id: a.id %>
 									<% if Answers.where(id: a.id).last.textAnswer == nil %>
 										<% @textValue = Useranswer.where(answers_id: a.id, users_id: User.current.id).last.answer_freeForm %>
 									<% end %>
