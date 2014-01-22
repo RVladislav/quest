@@ -21,16 +21,14 @@
 <!-- Массив id ответов -->
 <% @answersAns %>
 
-<h2><font color='black'>Мероприятия - </font>Красное озеро</h2>
+<h2><font color='black'>Красное озеро</font></h2>
 <h3><font color='black'><i>
 	<% if User.current.lastname != 'Anonymous' %>
 		<%= User.current.firstname %> 
 		<%= User.current.lastname %>
 	<% end %>
 </i></font></h3>
-<% if User.current.lastname == 'Anonymous' %>
-	<b>Авторизуйтесь, чтобы отвечать на вопросы</b>
-<% else %>
+
 	<% @check = false %> <!-- Если пользователь администратор: кнопка "Добавить вопрос"; Если ответы есть: кнопка "Посмотреть результаты" -->
 	<% @ua.each do |ch| %>
 		<% ch.users_id %>
@@ -50,7 +48,7 @@
 				<p>
 					<% @i = @i + 1 %>
 					<b>
-						<%= f.label q.textQuestion %>? <!-- Вывод вопроса -->
+						<%= f.label q.textQuestion %><!-- Вывод вопроса -->
 					</b>
 					<br>
 					<% @ansMany = Answers.where(questions_id: [q.id]) %> <!-- Вывод соответствующих вариантов ответа -->
@@ -82,4 +80,3 @@
 			<% end %>
 		<% end %>
 
-<% end %>
