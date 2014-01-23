@@ -8,6 +8,10 @@ class QuestionsController < ApplicationController
     @currentUs = Useranswer.where(users_id: User.current.id)
   end
 
+  def excel
+
+  end
+
   #Просмотр ответов
   def showans
     @ua = Useranswer.all

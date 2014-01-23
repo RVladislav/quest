@@ -1,0 +1,7 @@
+<h2>Excel</h2>
+<% @us = Allusers.all %>
+<% @us.each do |u| %>
+<%= u.userid %>;
+<%= u.fio %>;
+<br>
+<% end %>

@@ -14,4 +14,5 @@ RedmineApp::Application.routes.draw do
   match '/questions/saveNewQuestion', :to => 'questions#saveNewQuestion', :via => [:get, :post] #Сохранить новый вопрос
   match '/questions/delAllAnswers', :to => 'questions#delAllAnswers', :via => [:get, :post]#Удаление всех ответов пользователей
   match '/questions/delQuestion', :to => 'questions#delQuestion', :via => [:get, :post]#Удаление вопроса
+  match '/questions/excel', :to => 'questions#excel', :via => [:get, :post]#Excel результаты
 end
