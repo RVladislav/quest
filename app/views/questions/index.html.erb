@@ -4,6 +4,14 @@
 	function SelectRB (path) {
 		document.getElementById(path).checked = true;
 	}
+	function CheckSaveAnswers () {
+		if (document.getElementById('post_username').value != '' && (document.getElementById('1').checked || document.getElementById('2').checked || document.getElementById('3').checked) && (document.getElementById('4').checked || document.getElementById('5').checked || document.getElementById('6').checked || document.getElementById('7').checked)) {
+			document.getElementById('butSend').disabled = false;
+		} 
+		else {
+			document.getElementById('butSend').disabled = true;
+		}
+	}
 	</script>
 </head>
 <!-- Все ответы пользователя -->
@@ -45,9 +53,10 @@
 		<% @i = 0 %> <!-- Порядковый номер вопроса и разное имя для группы radioButton -->
 		<%= form_for :post, :url => { :action => 'saveUserAnswer', :controller => 'questions'} do |f| %>
 			<br>
-			<b>Фамилия Имя<b>
+			<b>Фамилия Имя*<b>
 				<br>
-			<%= f.text_field :username  %>
+				<br>
+			<%= f.text_field :username, onChange: "CheckSaveAnswers()" %>
 				<br>
 				<img id="spl">
 				<br>
@@ -69,7 +78,7 @@
 										<% @textValue = Useranswer.where(answers_id: a.id, users_id: User.current.id).last.answer_freeForm %>
 									<% end %>
 								<% else %>
-									<%= f.radio_button @i, a.id, id: a.id %>
+									<%= f.radio_button @i, a.id, id: a.id, onChange: "CheckSaveAnswers()" %>
 								<% end %>
 								<%= f.label a.textAnswer %> <!-- Текст ответа -->
 								<% if a.textAnswer == nil %>		
@@ -85,8 +94,11 @@
 				</p>	
 				
 			<% end %>
+			* - обязательные поля для заполнения
+			<br>
+			<br>
 			<% if Questions.count(:id) != 0%>
-				<%= f.submit 'Сохранить', id: 'butSend'%>
+				<%= f.submit 'Сохранить', id: 'butSend', disabled: true %>
 			<% end %>
 		<% end %>
 
