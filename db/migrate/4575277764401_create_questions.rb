@@ -7,4 +7,5 @@ class CreateQuestions < ActiveRecord::Migration
   def self.down
     drop_table :questions
   end
+  	
 end

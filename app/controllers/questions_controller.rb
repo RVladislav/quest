@@ -135,26 +135,28 @@ class QuestionsController < ApplicationController
     #if Useranswer.where(:users_id => User.current.id) != nil
     #  Useranswer.destroy_all(:users_id => User.current.id)
     #end
+    ###
+    if params[:post][:username] != ''
+      @newUser = Allusers.new
+      @newUser.userid = $num
+      @newUser.fio = params[:post][:username]
+      @newUser.save    
+    ###
     for i in 1..Questions.count(:id) do
       if params[:post][i.to_s()] != nil #Проверка, что ответ дан. Сохранение
-        @newUser = Allusers.new
         @usAnswer = Useranswer.new
         @usAnswer.users_id = $num
         @usAnswer.answers_id = params[:post][i.to_s()]
         #Если поле выбора ответа пустое, что значит: был выбран свободный ответ, то помимо остальной информации в таблицу добавляем текст ответа
         if Answers.where(:id => params[:post][i.to_s()]).last.textAnswer == nil
-          @text = '_' + params[:post][i.to_s()].to_s()
-          #@usAnswer.answer_freeForm = params[:post][@text]          
-          @newUser.userid = $num
-          @newUser.fio = params[:post][@text]
-        end
-        if Answers.where(:id => params[:post][i.to_s()]).last.textAnswer == nil
-          @newUser.save
-        end
-        @usAnswer.save
+          @text = '_' + params[:post][i.to_s()].to_s()          
+          @usAnswer.answer_freeForm = params[:post][@text]
+        end        
+          @usAnswer.save
         flash[:notice] = 'Your answer was saved'
         @check = true #Если ответ сохранён(хотябы 1), то выводится сообщение и флаг => true
       end
+    end
     end
     if @check != true #Если сохранений не было, выводим ошибку
       flash[:error] = 'Empty answer not was saved'
