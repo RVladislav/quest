@@ -1,7 +1,7 @@
 # coding: utf-8
 class QuestionsController < ApplicationController
   unloadable
-  $num = 0
+  $num = Allusers.all.count
   #Главная страница приложения
   def index
 	  @ques = Questions.all
@@ -159,13 +159,13 @@ class QuestionsController < ApplicationController
   def saveUserAnswer 
     Rails.logger.info "\e[31m " 
     Rails.logger.info params[:post]
-    Rails.logger.info "\e[0m"
-    $num = $num + 1
+    Rails.logger.info "\e[0m"    
     #if Useranswer.where(:users_id => User.current.id) != nil
     #  Useranswer.destroy_all(:users_id => User.current.id)
     #end
     ###
     if params[:post][:username] != '' and params[:post][1.to_s()] != nil and params[:post][2.to_s()] != nil
+      $num = $num + 1
       @newUser = Allusers.new
       @newUser.userid = $num
       @newUser.fio = params[:post][:username]
@@ -184,7 +184,7 @@ class QuestionsController < ApplicationController
           end        
             @usAnswer.save
           flash[:notice] = 'Your answer was saved'
-          @check = true #Если ответ сохранён(хотябы 1), то выводится сообщение и флаг => true
+          @check = true #Если ответ сохранён(хотябы 1), то выводится сообщение и флаг => true          
         end
       end
     end
