@@ -165,7 +165,7 @@ class QuestionsController < ApplicationController
     #  Useranswer.destroy_all(:users_id => User.current.id)
     #end
     ###
-    if params[:post][:username] != '' and params[:post].count >= 3
+    if params[:post][:username] != '' and params[:post][1.to_s()] != nil and params[:post][2.to_s()] != nil
       @newUser = Allusers.new
       @newUser.userid = $num
       @newUser.fio = params[:post][:username]
