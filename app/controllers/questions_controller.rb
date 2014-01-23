@@ -1,3 +1,4 @@
+# coding: utf-8
 class QuestionsController < ApplicationController
   unloadable
   $num = 0
@@ -10,6 +11,28 @@ class QuestionsController < ApplicationController
 
   def excel
 
+  end
+
+  def default
+    Questions.create(:textQuestion => "Планируете ли Вы поехать на Красное Озеро?")
+    Answers.create(:textAnswer => "Я поеду", :questions_id => Questions.last[:id])
+    Answers.create(:textAnswer => "Поеду с семьей (Члены семьи оплачиваются отдельно)", :questions_id => Questions.last[:id])
+    Answers.create(:textAnswer => "Я не поеду", :questions_id => Questions.last[:id])
+
+    Questions.create(:textQuestion => "Как Вы планируете добираться?")
+    Answers.create(:textAnswer => "Со всеми на автобусе от Петергофского офиса", :questions_id => Questions.last[:id])
+    Answers.create(:textAnswer => "Со всеми на автобусе от пр.Ветеранов", :questions_id => Questions.last[:id])
+    Answers.create(:textAnswer => "На своем а/м", :questions_id => Questions.last[:id])
+    Answers.create(:textAnswer => "Не планирую", :questions_id => Questions.last[:id])
+
+    Questions.create(:textQuestion => "Планируете ли пользоваться услугами проката?")
+        Answers.create(:textAnswer => "Планирую брать в прокат лыжи/cноуборд", :questions_id => Questions.last[:id])
+    Answers.create(:textAnswer => "Планирую воспользоваться услугами инструктора", :questions_id => Questions.last[:id])
+
+    Questions.create(:textQuestion => "Пожелания по проживанию в коттедже:")
+    Answers.create(:questions_id => Questions.last[:id])
+
+    redirect_to :action => 'index'
   end
 
   #Просмотр ответов

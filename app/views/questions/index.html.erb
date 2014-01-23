@@ -44,6 +44,7 @@
 		<% end %>
 		<% @i = 0 %> <!-- Порядковый номер вопроса и разное имя для группы radioButton -->
 		<%= form_for :post, :url => { :action => 'saveUserAnswer', :controller => 'questions'} do |f| %>
+			<br>
 			<b>Фамилия Имя<b>
 				<br>
 			<%= f.text_field :username  %>
