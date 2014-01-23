@@ -47,6 +47,9 @@
 			<br>
 			<b>Фамилия Имя<b>
 				<br>
+				<img id="spl">
+				<br>
+				<br>
 			<%= f.text_field :username  %>
 			<% @ques.each do |q| %>			
 				<p>
@@ -54,6 +57,7 @@
 					<b>
 						<%= f.label q.textQuestion %><!-- Вывод вопроса -->
 					</b>
+					<br>
 					<br>
 					<% @ansMany = Answers.where(questions_id: [q.id]) %> <!-- Вывод соответствующих вариантов ответа -->
 					<% @ansMany.each do |a| %>
