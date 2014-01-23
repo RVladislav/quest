@@ -1,3 +1,4 @@
+# encoding: utf-8
 class DefaultData < ActiveRecord::Migration
   def up
   	q = Questions.create(:textQuestion => "Планируете ли Вы поехать на Красное Озеро?")
