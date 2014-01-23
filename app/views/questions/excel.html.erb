@@ -1,7 +1,19 @@
 <h2>Excel</h2>
 <% @us = Allusers.all %>
 <% @us.each do |u| %>
-<%= u.userid %>;
+<%= u.id %>;
 <%= u.fio %>;
+<% Useranswer.where(allusers_id: [u.id]).each do |ua| %>
+<% Answers.where(id: [ua.answers_id]).each do |a| %>
+<% Questions.where(id: [a.questions_id]).each do |q| %>
+<%= q.textQuestion %>;
+<% if a.textAnswer == nil %>
+<%= ua.answer_freeForm %>;
+<% else %>
+<%= a.textAnswer %>;
+<% end %>
+<% end %>
+<% end %>
+<% end %>
 <br>
 <% end %>

@@ -15,7 +15,7 @@
 	</script>
 </head>
 <!-- Все ответы пользователя -->
-<% @uaCurrent = Useranswer.where(users_id:[User.current.id]) %>
+<% @uaCurrent = Useranswer.where(allusers_id:[User.current.id]) %>
 <% @answersAns = Array.new(@uaCurrent.count) %>
 <% @j = 1 %>
 <% @uaCurrent.each do |u| %>
@@ -39,8 +39,8 @@
 
 	<% @check = false %> <!-- Если пользователь администратор: кнопка "Добавить вопрос"; Если ответы есть: кнопка "Посмотреть результаты" -->
 	<% @ua.each do |ch| %>
-		<% ch.users_id %>
-		<% if ch.users_id == User.current.id %>
+		<% ch.allusers_id %>
+		<% if ch.allusers_id == User.current.id %>
 			<% @check = true %>
 		<% end %>
 	<% end %>
@@ -71,11 +71,11 @@
 					<% @ansMany = Answers.where(questions_id: [q.id]) %> <!-- Вывод соответствующих вариантов ответа -->
 					<% @ansMany.each do |a| %>
 								<% @textValue = nil %>					
-								<% if @answersAns.include?(a.id) and User.current.id == Useranswer.where(answers_id: a.id, users_id: User.current.id).last.users_id %><!-- Проверка на наличие данного ответа. Если так, то отмечаем -->
+								<% if @answersAns.include?(a.id) and User.current.id == Useranswer.where(answers_id: a.id, allusers_id: User.current.id).last.allusers_id %><!-- Проверка на наличие данного ответа. Если так, то отмечаем -->
 									<!--<%= f.radio_button @i, a.id, id: a.id, checked: true %>-->
 										<%= f.radio_button @i, a.id, id: a.id %>
 									<% if Answers.where(id: a.id).last.textAnswer == nil %>
-										<% @textValue = Useranswer.where(answers_id: a.id, users_id: User.current.id).last.answer_freeForm %>
+										<% @textValue = Useranswer.where(answers_id: a.id, allusers_id: User.current.id).last.answer_freeForm %>
 									<% end %>
 								<% else %>
 									<%= f.radio_button @i, a.id, id: a.id, onChange: "CheckSaveAnswers()" %>

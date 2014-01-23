@@ -1,12 +1,11 @@
 # coding: utf-8
 class QuestionsController < ApplicationController
   unloadable
-  $num = Allusers.all.count
   #Главная страница приложения
   def index
 	  @ques = Questions.all
     @ua = Useranswer.all
-    @currentUs = Useranswer.where(users_id: User.current.id)
+    @currentUs = Useranswer.where(allusers_id: User.current.id)
   end
 
   def excel
@@ -141,17 +140,15 @@ class QuestionsController < ApplicationController
     #end
     ###
     if params[:post][:username] != '' and params[:post][1.to_s()] != nil and params[:post][2.to_s()] != nil
-      $num = $num + 1
       @newUser = Allusers.new
-      @newUser.userid = $num
       @newUser.fio = params[:post][:username]
-      @newUser.save  
+      @newUser.save
     ###
       for i in 1..Questions.count(:id) do
         @k = i + 1
         if params[:post][i.to_s()] != nil#Проверка, что ответ дан. Сохранение
           @usAnswer = Useranswer.new
-          @usAnswer.users_id = $num
+          @usAnswer.allusers_id = @newUser.id
           @usAnswer.answers_id = params[:post][i.to_s()]
           #Если поле выбора ответа пустое, что значит: был выбран свободный ответ, то помимо остальной информации в таблицу добавляем текст ответа
           if Answers.where(:id => params[:post][i.to_s()]).last.textAnswer == nil

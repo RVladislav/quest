@@ -1,3 +1,3 @@
 class Allusers < ActiveRecord::Base
-  unloadable
+  has_many :useranswer #1 запись таблицы Allusers соответствует n записям таблицы UserAnswer 
 end
