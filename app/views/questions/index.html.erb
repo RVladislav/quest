@@ -70,7 +70,8 @@
 								<% if a.textAnswer == nil %>		
 									<% @t = 'SelectRB('+a.id.to_s()+')' %> <!-- JavaScript. Автоматический выбор текстового поля -->
 									<% @te = '_' + Answers.where(questions_id: [q.id]).last.id.to_s() %>
-									<%= f.text_field @te, onChange:@t.to_s(), value: @textValue %>
+									<!--<%= f.text_field @te, onChange:@t.to_s(), value: @textValue %>-->
+									<%= f.text_field @te, onChange:@t.to_s() %>
 								<% end %>
 						<br>			
 					<% end %>
