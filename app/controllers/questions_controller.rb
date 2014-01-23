@@ -14,6 +14,7 @@ class QuestionsController < ApplicationController
   end
 
   def default
+    if Questions.all.count == 0
     Questions.create(:textQuestion => "Планируете ли Вы поехать на Красное Озеро?")
     Answers.create(:textAnswer => "Я поеду", :questions_id => Questions.last[:id])
     Answers.create(:textAnswer => "Поеду с семьей (Члены семьи оплачиваются отдельно)", :questions_id => Questions.last[:id])
@@ -31,6 +32,7 @@ class QuestionsController < ApplicationController
 
     Questions.create(:textQuestion => "Пожелания по проживанию в коттедже:")
     Answers.create(:questions_id => Questions.last[:id])
+    end
 
     redirect_to :action => 'index'
   end
